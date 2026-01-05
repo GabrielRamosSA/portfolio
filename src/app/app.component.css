@@ -138,10 +138,24 @@ header {
   font-size: 60px;
   font-weight: 700;
   margin-bottom: 10px;
-  background: linear-gradient(90deg, var(--white), var(--primary-green));
+  background: linear-gradient(90deg, var(--white), var(--primary-green), var(--white), var(--primary-green));
+  background-size: 300% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: gradientMove 3s ease-in-out infinite;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .title {
@@ -697,11 +711,13 @@ footer {
   border: 1px solid transparent;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
-.social-link i {
-  font-size: 20px;
+.social-link svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
 }
 
 .social-link:hover {
@@ -715,7 +731,6 @@ footer {
   font-size: 14px;
 }
 
-/* ===== RESPONSIVIDADE ===== */
 @media (max-width: 1024px) {
   header {
     padding: 15px 40px;

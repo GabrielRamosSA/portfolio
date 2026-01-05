@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -10,62 +10,90 @@ import { CommonModule } from '@angular/common';
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
-  title = 'portfolio';
-  
-  // Carousel properties
-  currentSlide = 0;
+  titulo = 'portfolio';
+  slideAtual = 0;
   totalSlides = 2;
+  private observador!: IntersectionObserver;
 
   @ViewChildren('video0, video1') videos!: QueryList<ElementRef<HTMLVideoElement>>;
+  @ViewChild('secaoProjetos') secaoProjetos!: ElementRef;
 
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
-    this.playCurrentVideo();
+    setTimeout(() => {
+      this.configurarObservador();
+    }, 500);
   }
 
   ngOnDestroy(): void {
-    this.pauseAllVideos();
-  }
-
-  onVideoEnded(): void {
-    this.nextSlide();
-  }
-
-  nextSlide(): void {
-    this.pauseAllVideos();
-    this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
-    setTimeout(() => this.playCurrentVideo(), 100);
-  }
-
-  prevSlide(): void {
-    this.pauseAllVideos();
-    this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
-    setTimeout(() => this.playCurrentVideo(), 100);
-  }
-
-  goToSlide(index: number): void {
-    if (index !== this.currentSlide) {
-      this.pauseAllVideos();
-      this.currentSlide = index;
-      setTimeout(() => this.playCurrentVideo(), 100);
+    this.pausarTodosVideos();
+    if (this.observador) {
+      this.observador.disconnect();
     }
   }
 
-  private playCurrentVideo(): void {
-    const videosArray = this.videos?.toArray();
-    if (videosArray && videosArray[this.currentSlide]) {
-      const video = videosArray[this.currentSlide].nativeElement;
+  private configurarObservador(): void {
+    const opcoes = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.3
+    };
+
+    this.observador = new IntersectionObserver((entradas) => {
+      entradas.forEach(entrada => {
+        if (entrada.isIntersecting) {
+          this.reproduzirVideoAtual();
+        } else {
+          this.pausarTodosVideos();
+        }
+      });
+    }, opcoes);
+
+    if (this.secaoProjetos?.nativeElement) {
+      this.observador.observe(this.secaoProjetos.nativeElement);
+    }
+  }
+
+  aoTerminarVideo(): void {
+    this.proximoSlide();
+  }
+
+  proximoSlide(): void {
+    this.pausarTodosVideos();
+    this.slideAtual = (this.slideAtual + 1) % this.totalSlides;
+    setTimeout(() => this.reproduzirVideoAtual(), 100);
+  }
+
+  slideAnterior(): void {
+    this.pausarTodosVideos();
+    this.slideAtual = (this.slideAtual - 1 + this.totalSlides) % this.totalSlides;
+    setTimeout(() => this.reproduzirVideoAtual(), 100);
+  }
+
+  irParaSlide(indice: number): void {
+    if (indice !== this.slideAtual) {
+      this.pausarTodosVideos();
+      this.slideAtual = indice;
+      setTimeout(() => this.reproduzirVideoAtual(), 100);
+    }
+  }
+
+  private reproduzirVideoAtual(): void {
+    const listaVideos = this.videos?.toArray();
+    if (listaVideos && listaVideos[this.slideAtual]) {
+      const video = listaVideos[this.slideAtual].nativeElement;
       video.currentTime = 0;
+      video.muted = true;
       video.play().catch(() => {});
     }
   }
 
-  private pauseAllVideos(): void {
+  private pausarTodosVideos(): void {
     this.videos?.forEach(videoRef => {
       const video = videoRef.nativeElement;
       video.pause();
-      video.currentTime = 0;
     });
   }
 }
+
