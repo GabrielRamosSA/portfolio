@@ -163,9 +163,11 @@
             <div class="project-video">
               <video 
                 #video0
-                [muted]="true" 
+                muted
+                loop
                 autoplay 
                 playsinline
+                preload="auto"
                 (ended)="onVideoEnded()"
                 [class.playing]="currentSlide === 0">
                 <source src="videos/gilson-farma.mp4" type="video/mp4">
@@ -209,9 +211,11 @@
             <div class="project-video">
               <video 
                 #video1
-                [muted]="true" 
+                muted 
                 autoplay 
+                loop
                 playsinline
+                preload="auto"
                 (ended)="onVideoEnded()"
                 [class.playing]="currentSlide === 1">
                 <source src="videos/gerador_etiquetas.mp4" type="video/mp4">
