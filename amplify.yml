@@ -14,3 +14,14 @@ frontend:
   cache:
     paths:
       - node_modules/**/*
+customHeaders:
+  - pattern: '**/*.mp4'
+    headers:
+      - key: Content-Type
+        value: video/mp4
+      - key: Access-Control-Allow-Origin
+        value: '*'
+  - pattern: 'videos/*'
+    headers:
+      - key: Content-Type
+        value: video/mp4
