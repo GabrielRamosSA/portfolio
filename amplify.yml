@@ -3,8 +3,9 @@ frontend:
   phases:
     preBuild:
       commands:
-        - curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
-        - sudo apt-get install git-lfs -y
+        - yum install -y amazon-linux-extras || true
+        - amazon-linux-extras install -y epel || true
+        - yum install -y git-lfs || curl -s https://github.com/git-lfs/git-lfs/releases/download/v3.4.0/git-lfs-linux-amd64-v3.4.0.tar.gz | tar xz && ./git-lfs-3.4.0/install.sh
         - git lfs install
         - git lfs pull
         - npm ci
@@ -20,12 +21,6 @@ frontend:
       - node_modules/**/*
 customHeaders:
   - pattern: '**/*.mp4'
-    headers:
-      - key: Content-Type
-        value: video/mp4
-      - key: Access-Control-Allow-Origin
-        value: '*'
-  - pattern: 'videos/*'
     headers:
       - key: Content-Type
         value: video/mp4
