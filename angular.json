@@ -23,11 +23,11 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "public",
+                "output": "/"
               }
             ],
             "styles": [
-              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -37,13 +37,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "1MB",
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "50kb",
-                  "maximumError": "100kB"
+                  "maximumWarning": "16kB",
+                  "maximumError": "20kB"
                 }
               ],
               "outputHashing": "all"
@@ -95,6 +95,6 @@
     }
   },
   "cli": {
-    "analytics": "ef5a2034-177b-4ccc-ba6c-25b04b7c5083"
+    "analytics": "806d5b6d-2354-4a05-b90c-c8cd21f87c90"
   }
 }
